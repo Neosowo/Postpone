@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Postpone — Mide tu tiempo productivo real frente al tiempo perdido. Sistema de foco basado en compromiso activo." />
+    <meta name="theme-color" content="#09090b" />
+    <meta name="author" content="neosowo" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Postpone — ¿Estás trabajando?" />
+    <meta property="og:description"
+        content="Mide tu tiempo productivo real frente al tiempo perdido. Sistema de foco basado en compromiso activo." />
+    <meta property="og:image" content="img/favicon.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Postpone — ¿Estás trabajando?" />
+    <meta name="twitter:description"
+        content="Mide tu tiempo productivo real frente al tiempo perdido. Sistema de foco basado en compromiso activo." />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="apple-touch-icon" href="img/favicon.png" />
+    <title>Postpone — ¿Estás trabajando?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Courier New', 'monospace'],
+                    },
+                    keyframes: {
+                        'pulse-red': {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.25' },
+                        },
+                        'slide-down': {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'ticker': {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        'count-up': {
+                            '0%': { transform: 'translateY(6px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                    },
+                    animation: {
+                        'pulse-red': 'pulse-red 1.2s ease-in-out infinite',
+                        'slide-down': 'slide-down 0.25s ease-out forwards',
+                        'ticker': 'ticker 35s linear infinite',
+                        'count-up': 'count-up 0.2s ease-out',
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-zinc-950 text-zinc-50 min-h-screen font-sans antialiased overflow-x-hidden">
+
+    <div id="day-progress-bar" class="fixed top-0 left-0 h-[2px] bg-red-600 z-50 transition-all duration-1000"
+        style="width:0%"></div>
+
+    <nav class="fixed top-0 left-0 right-0 z-40 border-b border-zinc-800 bg-zinc-950 bg-opacity-95 backdrop-blur-sm">
+        <div class="max-w-6xl mx-auto px-6 h-12 flex items-center justify-between">
+            <span class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-500">Postpone</span>
+            <div class="flex items-center gap-4 md:gap-8">
+                <div class="hidden sm:flex items-center gap-2">
+                    <span class="text-[10px] font-black tracking-widest uppercase text-zinc-700">Eficiencia hoy</span>
+                    <span id="nav-efficiency" class="text-[10px] font-black text-zinc-400 tabular-nums">—</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="nav-state-dot" class="w-1.5 h-1.5 bg-zinc-700"></span>
+                    <span id="nav-state-label"
+                        class="hidden sm:inline text-[10px] font-black tracking-widest uppercase text-zinc-700">Inactivo</span>
+                </div>
+                <button id="btn-mute" type="button"
+                    class="flex items-center justify-center w-7 h-7 border border-zinc-800 text-zinc-600 text-xs transition-all duration-100 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95"
+                    aria-label="Activar o silenciar sonidos" title="Sonidos activados">
+                    <span id="mute-icon">♪</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 pt-24 pb-32">
+
+        <section class="min-h-[80vh] flex flex-col justify-center py-12 md:py-24">
+
+            <div class="flex items-center gap-4 mb-8">
+                <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700">Hora local</p>
+                <div class="flex-1 h-px bg-zinc-800"></div>
+                <span id="day-pct-label" class="text-[10px] font-black tabular-nums text-zinc-700">0.0% del día</span>
+            </div>
+
+            <div id="clock"
+                class="text-[clamp(3.5rem,16vw,10rem)] font-black tracking-tighter leading-none text-zinc-50 tabular-nums"
+                aria-live="polite" aria-atomic="true">
+                00:00:00
+            </div>
+
+            <div class="h-[2px] bg-zinc-800 mt-4 mb-10">
+                <div id="day-pct-bar-fill" class="h-full bg-zinc-700 transition-all duration-1000" style="width:0%">
+                </div>
+            </div>
+
+            <div id="state-block" class="mb-10">
+
+                <div id="state-idle" class="block">
+                    <p class="text-base md:text-lg text-zinc-500 font-medium max-w-lg leading-relaxed">
+                        Declara que vas a trabajar.<br />
+                        El sistema medirá tu tiempo productivo real frente al tiempo que pierdes.
+                    </p>
+                </div>
+
+                <div id="state-working" class="hidden">
+                    <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700 mb-3">Tiempo de foco
+                        activo</p>
+                    <p id="work-timer"
+                        class="text-[clamp(2.5rem,10vw,7rem)] font-black tracking-tighter leading-none text-zinc-50 tabular-nums"
+                        aria-live="polite" aria-atomic="true">
+                        00:00:00
+                    </p>
+                </div>
+
+                <div id="state-distracted" class="hidden">
+                    <p class="text-[10px] font-black tracking-[0.5em] uppercase text-red-600 mb-3">Tiempo fuera de foco
+                    </p>
+                    <p id="distract-timer"
+                        class="text-[clamp(2.5rem,10vw,7rem)] font-black tracking-tighter leading-none text-red-600 tabular-nums animate-pulse-red"
+                        aria-live="polite" aria-atomic="true">
+                        00:00:00
+                    </p>
+                    <p id="distract-message" class="text-sm text-zinc-600 mt-3 font-medium max-w-md"></p>
+                </div>
+
+            </div>
+
+            <div id="action-area"
+                class="flex flex-col items-stretch sm:flex-row sm:items-center gap-3 sm:gap-4 flex-wrap">
+
+                <button id="btn-start" type="button"
+                    class="w-full sm:w-auto px-8 py-4 sm:py-5 bg-zinc-50 text-zinc-950 text-sm font-black tracking-[0.2em] uppercase border-2 border-zinc-50 transition-all duration-100 hover:bg-zinc-950 hover:text-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-95"
+                    aria-label="Declarar inicio de sesión de trabajo">
+                    ▶ Iniciar sesión
+                </button>
+
+                <button id="btn-lost-focus" type="button"
+                    class="hidden w-full sm:w-auto px-5 py-4 sm:py-5 bg-transparent text-zinc-600 text-xs font-black tracking-[0.2em] uppercase border border-zinc-800 transition-all duration-100 hover:border-red-600 hover:text-red-600 focus:outline-none active:scale-95"
+                    aria-label="Declarar pérdida de foco">
+                    ✕ Perdí el foco
+                </button>
+
+                <button id="btn-resume" type="button"
+                    class="hidden w-full sm:w-auto px-8 py-4 sm:py-5 bg-red-600 text-zinc-50 text-sm font-black tracking-[0.2em] uppercase border-2 border-red-600 transition-all duration-100 hover:bg-zinc-950 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-95"
+                    aria-label="Retomar sesión de trabajo">
+                    ▶ Retomar trabajo
+                </button>
+
+                <button id="btn-end" type="button"
+                    class="hidden w-full sm:w-auto px-5 py-4 sm:py-5 bg-transparent text-zinc-700 text-xs font-black tracking-[0.2em] uppercase border border-zinc-800 transition-all duration-100 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95"
+                    aria-label="Terminar sesión del día">
+                    ◼ Terminar sesión
+                </button>
+
+                <button id="btn-reset" type="button"
+                    class="hidden w-full sm:w-auto px-5 py-4 sm:py-5 bg-transparent text-zinc-800 text-xs font-black tracking-[0.2em] uppercase border border-zinc-900 transition-all duration-100 hover:border-zinc-700 hover:text-zinc-600 focus:outline-none active:scale-95"
+                    aria-label="Reiniciar estadísticas del día">
+                    Reiniciar día
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="py-16 md:py-24 border-t border-zinc-800">
+            <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700 mb-8">Estadísticas del día</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-zinc-800 mb-6">
+                <div class="bg-zinc-950 p-4 md:p-8">
+                    <p
+                        class="text-[9px] md:text-[10px] font-black tracking-[0.3em] md:tracking-[0.4em] uppercase text-zinc-700 mb-2 md:mb-3">
+                        Foco total</p>
+                    <p id="stat-work" class="text-2xl md:text-5xl font-black text-zinc-50 tabular-nums leading-none">
+                        00:00:00</p>
+                </div>
+                <div class="bg-zinc-950 p-4 md:p-8">
+                    <p
+                        class="text-[9px] md:text-[10px] font-black tracking-[0.3em] md:tracking-[0.4em] uppercase text-zinc-700 mb-2 md:mb-3">
+                        Tiempo perdido</p>
+                    <p id="stat-lost" class="text-2xl md:text-5xl font-black text-red-600 tabular-nums leading-none">
+                        00:00:00</p>
+                </div>
+                <div class="bg-zinc-950 p-4 md:p-8">
+                    <p
+                        class="text-[9px] md:text-[10px] font-black tracking-[0.3em] md:tracking-[0.4em] uppercase text-zinc-700 mb-2 md:mb-3">
+                        Eficiencia</p>
+                    <p id="stat-efficiency"
+                        class="text-2xl md:text-5xl font-black text-zinc-50 tabular-nums leading-none">—</p>
+                </div>
+                <div class="bg-zinc-950 p-6 md:p-8">
+                    <p class="text-[10px] font-black tracking-[0.4em] uppercase text-zinc-700 mb-3">Interrupciones</p>
+                    <p id="stat-interruptions"
+                        class="text-4xl md:text-5xl font-black text-zinc-50 tabular-nums leading-none">0</p>
+                </div>
+            </div>
+
+            <div class="h-[6px] bg-zinc-800 w-full" aria-label="Barra de eficiencia del día">
+                <div id="efficiency-bar" class="h-full bg-zinc-50 transition-all duration-700" style="width:0%"></div>
+            </div>
+            <div class="flex justify-between mt-2">
+                <span class="text-[10px] font-black tracking-widest uppercase text-zinc-700">Foco</span>
+                <span class="text-[10px] font-black tracking-widest uppercase text-zinc-700">Distracción</span>
+            </div>
+        </section>
+
+        <section id="history-section" class="pt-4 pb-16 md:pb-24 hidden">
+            <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700 mb-6">Bloques de sesión</p>
+            <ol id="history-list" class="flex flex-col" aria-label="Historial de bloques de trabajo y distracción"></ol>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-zinc-800 overflow-hidden">
+        <div class="py-3 flex items-center whitespace-nowrap">
+            <div id="ticker"
+                class="inline-flex gap-16 text-[10px] font-black tracking-[0.3em] uppercase text-zinc-800 animate-ticker will-change-transform">
+                <span>20% de los adultos son procrastinadores crónicos</span>
+                <span>✦</span>
+                <span>El foco sostenido es el activo más escaso del siglo XXI</span>
+                <span>✦</span>
+                <span>Cada interrupción cuesta 23 minutos de recuperación de atención</span>
+                <span>✦</span>
+                <span>La acción imperfecta supera a la inacción perfecta</span>
+                <span>✦</span>
+                <span>Tú ya sabes lo que tienes que hacer</span>
+                <span>✦</span>
+                <span>El momento perfecto nunca llega. Este momento sí.</span>
+                <span>✦</span>
+                <span>20% de los adultos son procrastinadores crónicos</span>
+                <span>✦</span>
+                <span>El foco sostenido es el activo más escaso del siglo XXI</span>
+                <span>✦</span>
+                <span>Cada interrupción cuesta 23 minutos de recuperación de atención</span>
+                <span>✦</span>
+                <span>La acción imperfecta supera a la inacción perfecta</span>
+                <span>✦</span>
+                <span>Tú ya sabes lo que tienes que hacer</span>
+                <span>✦</span>
+                <span>El momento perfecto nunca llega. Este momento sí.</span>
+                <span>✦</span>
+            </div>
+        </div>
+        <div
+            class="border-t border-zinc-900 px-6 py-5 max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <p class="text-[10px] font-black tracking-[0.4em] uppercase text-zinc-800">El tiempo no negocia.</p>
+            <div class="flex items-center gap-3">
+                <a href="https://ko-fi.com/neosowo" target="_blank" rel="noopener noreferrer"
+                    class="flex items-center gap-2 px-4 py-2 border border-zinc-800 text-zinc-600 text-[10px] font-black tracking-[0.25em] uppercase transition-all duration-100 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95"
+                    aria-label="Donar vía Ko-fi">
+                    <span aria-hidden="true">☕</span>
+                    <span>Ko-fi</span>
+                </a>
+                <button id="btn-deuna" type="button"
+                    class="flex items-center gap-2 px-4 py-2 border border-zinc-800 text-zinc-600 text-[10px] font-black tracking-[0.25em] uppercase transition-all duration-100 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95"
+                    aria-label="Donar vía Deuna con QR">
+                    <span aria-hidden="true">⯾</span>
+                    <span>Deuna</span>
+                </button>
+            </div>
+            <p class="text-[10px] font-black tracking-[0.4em] uppercase text-zinc-800">Postpone &copy; 2026</p>
+        </div>
+    </footer>
+
+    <div id="modal-deuna" class="fixed inset-0 z-50 hidden items-center justify-center bg-zinc-950 bg-opacity-95 p-6"
+        role="dialog" aria-modal="true" aria-labelledby="modal-deuna-title">
+        <div class="w-full max-w-xs bg-zinc-950 border border-zinc-800 flex flex-col">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
+                <p id="modal-deuna-title" class="text-[10px] font-black tracking-[0.4em] uppercase text-zinc-400">Donar
+                    con Deuna</p>
+                <button id="btn-deuna-close" type="button"
+                    class="text-zinc-700 text-sm hover:text-zinc-400 transition-colors focus:outline-none"
+                    aria-label="Cerrar modal">✕</button>
+            </div>
+            <div class="p-5 flex flex-col items-center gap-5">
+                <img src="img/qr.png" alt="Código QR de Deuna para donar"
+                    class="w-full max-w-[220px] border border-zinc-800" draggable="false" />
+                <p class="text-sm text-zinc-400 text-center leading-relaxed">
+                    Escanea este código desde tu app
+                    <span class="font-black text-zinc-50">Deuna</span>
+                    para apoyar el proyecto. ¡Gracias!
+                </p>
+                <div class="w-full border-t border-zinc-900 pt-4 flex flex-col items-center gap-3">
+                    <p class="text-[9px] font-black tracking-[0.4em] uppercase text-zinc-700">¿O prefieres ayudar
+                        compartiendo?</p>
+                    <div class="flex items-center gap-3">
+                        <a id="share-whatsapp"
+                            href="https://api.whatsapp.com/send?text=Usa%20Postpone%20para%20medir%20tu%20tiempo%20productivo. %20https://neosowo.github.io/Postpone/"
+                            target="_blank" rel="noopener noreferrer"
+                            class="flex items-center justify-center w-9 h-9 border border-zinc-800 text-zinc-600 text-sm transition-all duration-100 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95"
+                            aria-label="Compartir por WhatsApp">✉</a>
+                        <button id="share-copy" type="button"
+                            class="flex items-center justify-center w-9 h-9 border border-zinc-800 text-zinc-600 text-sm transition-all duration-100 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95"
+                            aria-label="Copiar enlace">⧄</button>
+                    </div>
+                    <p class="text-[9px] text-zinc-700 text-center leading-relaxed">Compartir es gratis y me
+                        ayudaría<br />a llegar a más personas :D</p>
+                </div>
+            </div>
+            <div class="border-t border-zinc-800 p-4">
+                <button id="btn-deuna-later" type="button"
+                    class="w-full py-3 border border-zinc-800 text-[10px] font-black tracking-[0.3em] uppercase text-zinc-600 transition-all duration-100 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95">Quizás
+                    más tarde</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const modalDeuna = document.getElementById('modal-deuna');
+        const btnDeuna = document.getElementById('btn-deuna');
+        const btnDeunaCls = document.getElementById('btn-deuna-close');
+        const btnDeunaLater = document.getElementById('btn-deuna-later');
+        const shareCopy = document.getElementById('share-copy');
+
+        const openModal = () => {
+            modalDeuna.classList.remove('hidden');
+            modalDeuna.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeModal = () => {
+            modalDeuna.classList.add('hidden');
+            modalDeuna.classList.remove('flex');
+            document.body.style.overflow = '';
+        };
+
+        btnDeuna.addEventListener('click', openModal);
+        btnDeunaCls.addEventListener('click', closeModal);
+        btnDeunaLater.addEventListener('click', closeModal);
+        modalDeuna.addEventListener('click', (e) => {
+            if (e.target === modalDeuna) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        shareCopy.addEventListener('click', () => {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const orig = shareCopy.textContent;
+                shareCopy.textContent = '✓';
+                shareCopy.classList.add('text-zinc-50', 'border-zinc-600');
+                setTimeout(() => {
+                    shareCopy.textContent = orig;
+                    shareCopy.classList.remove('text-zinc-50', 'border-zinc-600');
+                }, 1500);
+            }).catch(() => { });
+        });
+    </script>
+</body>
+
+</html>
