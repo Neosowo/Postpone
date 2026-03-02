@@ -13,13 +13,14 @@
     <meta property="og:title" content="Postpone — ¿Estás trabajando?" />
     <meta property="og:description"
         content="Mide tu tiempo productivo real frente al tiempo perdido. Sistema de foco basado en compromiso activo." />
-    <meta property="og:image" content="img/favicon.png" />
+    <meta property="og:image" content="img/favicon.ico" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Postpone — ¿Estás trabajando?" />
     <meta name="twitter:description"
         content="Mide tu tiempo productivo real frente al tiempo perdido. Sistema de foco basado en compromiso activo." />
-    <link rel="icon" type="image/png" href="img/favicon.png" />
-    <link rel="apple-touch-icon" href="img/favicon.png" />
+    <link rel="icon" type="image/png" href="img/favicon.ico " />
+    <link rel="apple-touch-icon" href="img/favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
     <title>Postpone — ¿Estás trabajando?</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css" />
@@ -360,6 +361,14 @@
                 }, 1500);
             }).catch(() => { });
         });
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => { });
+            });
+        }
     </script>
 </body>
 

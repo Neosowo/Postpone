@@ -1,0 +1,18 @@
+{
+  "name": "Postpone — ¿Estás trabajando?",
+  "short_name": "Postpone",
+  "description": "Mide tu tiempo productivo real frente al tiempo perdido.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "img/favicon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
