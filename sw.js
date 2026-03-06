@@ -37,11 +37,23 @@ self.addEventListener('activate', (event) => {
     self.clients.claim();
 });
 
+// Dominios de publicidad que NUNCA deben ser cacheados
+const AD_DOMAINS = [
+    'pagead2.googlesyndication.com',
+    'googleads.g.doubleclick.net',
+    'adservice.google.com',
+    'tpc.googlesyndication.com',
+    'partner.googleadservices.com',
+];
+
 self.addEventListener('fetch', (event) => {
     const { request } = event;
     const url = new URL(request.url);
 
     if (request.method !== 'GET') return;
+
+    // Dejar pasar los anuncios sin interceptar
+    if (AD_DOMAINS.some((domain) => url.hostname.includes(domain))) return;
 
     const isLocal = url.origin === self.location.origin;
     const isExternal = EXTERNAL_ASSETS.some((ext) => request.url.startsWith(ext));
