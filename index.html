@@ -5,28 +5,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description"
-        content="Postpone — Mide tu tiempo productivo real frente al tiempo perdido. Sistema de foco basado en compromiso activo." />
+        content="Postpone — Maximizando la productividad real mediante el compromiso activo. Herramienta de foco y gestión del tiempo basada en la ciencia cognitiva." />
     <meta name="theme-color" content="#09090b" />
     <meta name="author" content="neosowo" />
     <meta name="robots" content="index, follow" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Postpone — ¿Estás trabajando?" />
+    <meta property="og:title" content="Postpone — Sistema de Foco Activo y Productividad Real" />
     <meta property="og:description"
-        content="Mide tu tiempo productivo real frente al tiempo perdido. Sistema de foco basado en compromiso activo." />
+        content="Mide tu tiempo productivo real frente al tiempo perdido. Basado en el método de compromiso activo para vencer la procrastinación." />
     <meta property="og:image" content="img/favicon.ico" />
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Postpone — ¿Estás trabajando?" />
     <meta name="twitter:description"
         content="Mide tu tiempo productivo real frente al tiempo perdido. Sistema de foco basado en compromiso activo." />
-    <link rel="icon" type="image/png" href="img/favicon.ico " />
+    <link rel="icon" type="image/png" href="img/favicon.ico" />
     <link rel="apple-touch-icon" href="img/favicon.ico" />
     <link rel="manifest" href="manifest.json" />
-    <title>Postpone — ¿Estás trabajando?</title>
+    <link rel="canonical" href="https://neosowo.github.io/Postpone/" />
+    <title>Postpone — Sistema de Foco Activo y Productividad Real</title>
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8771484945698756"
         crossorigin="anonymous"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css" />
+    <style>
+        .gsap-reveal { opacity: 0; }
+    </style>
     <script>
         tailwind.config = {
             theme: {
@@ -70,12 +74,20 @@
     <div id="day-progress-bar" class="fixed top-0 left-0 h-[2px] bg-red-600 z-50 transition-all duration-1000"
         style="width:0%"></div>
 
-    <nav class="fixed top-0 left-0 right-0 z-40 border-b border-zinc-800 bg-zinc-950 bg-opacity-95 backdrop-blur-sm">
+    <nav class="gsap-reveal fixed top-0 left-0 right-0 z-40 border-b border-zinc-800 bg-zinc-950 bg-opacity-95 backdrop-blur-sm">
         <div class="max-w-6xl mx-auto px-6 h-12 flex items-center justify-between">
-            <span class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-500">Postpone</span>
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-500 hover:text-zinc-100 transition-colors">Postpone</a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="metodo.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-600 hover:text-zinc-300 transition-colors">Método</a>
+                    <a href="ciencia.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-600 hover:text-zinc-300 transition-colors">Ciencia</a>
+                    <a href="tecnicas.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-600 hover:text-zinc-300 transition-colors">Técnicas</a>
+                    <a href="about.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-600 hover:text-zinc-300 transition-colors">Acerca de</a>
+                </div>
+            </div>
             <div class="flex items-center gap-4 md:gap-8">
                 <div class="hidden sm:flex items-center gap-2">
-                    <span class="text-[10px] font-black tracking-widest uppercase text-zinc-700">Eficiencia hoy</span>
+                    <span class="text-[10px] font-black tracking-widest uppercase text-zinc-700">Eficiencia</span>
                     <span id="nav-efficiency" class="text-[10px] font-black text-zinc-400 tabular-nums">—</span>
                 </div>
                 <div class="flex items-center gap-2">
@@ -84,7 +96,7 @@
                         class="hidden sm:inline text-[10px] font-black tracking-widest uppercase text-zinc-700">Inactivo</span>
                 </div>
                 <button id="btn-mute" type="button"
-                    class="flex items-center justify-center w-7 h-7 border border-zinc-800 text-zinc-600 text-xs transition-all duration-100 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95"
+                    class="flex items-center justify-center w-7 h-7 border border-zinc-800 text-zinc-600 text-xs focus:outline-none active:scale-95"
                     aria-label="Activar o silenciar sonidos" title="Sonidos activados">
                     <span id="mute-icon">♪</span>
                 </button>
@@ -92,7 +104,7 @@
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-6 pt-24 pb-32">
+    <main class="gsap-reveal max-w-6xl mx-auto px-6 pt-24 pb-32">
 
         <section class="min-h-[80vh] flex flex-col justify-center py-12 md:py-24">
 
@@ -109,7 +121,7 @@
             </div>
 
             <div class="h-[2px] bg-zinc-800 mt-4 mb-10">
-                <div id="day-pct-bar-fill" class="h-full bg-zinc-700 transition-all duration-1000" style="width:0%">
+                <div id="day-pct-bar-fill" class="h-full bg-zinc-700" style="width:0%">
                 </div>
             </div>
 
@@ -149,31 +161,31 @@
                 class="flex flex-col items-stretch sm:flex-row sm:items-center gap-3 sm:gap-4 flex-wrap">
 
                 <button id="btn-start" type="button"
-                    class="w-full sm:w-auto px-8 py-4 sm:py-5 bg-zinc-50 text-zinc-950 text-sm font-black tracking-[0.2em] uppercase border-2 border-zinc-50 transition-all duration-100 hover:bg-zinc-950 hover:text-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-95"
+                    class="w-full sm:w-auto px-8 py-4 sm:py-5 bg-zinc-50 text-zinc-950 text-sm font-black tracking-[0.2em] uppercase border-2 border-zinc-50 hover:bg-zinc-950 hover:text-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-95"
                     aria-label="Declarar inicio de sesión de trabajo">
                     ▶ Iniciar sesión
                 </button>
 
                 <button id="btn-lost-focus" type="button"
-                    class="hidden w-full sm:w-auto px-5 py-4 sm:py-5 bg-transparent text-zinc-600 text-xs font-black tracking-[0.2em] uppercase border border-zinc-800 transition-all duration-100 hover:border-red-600 hover:text-red-600 focus:outline-none active:scale-95"
+                    class="hidden w-full sm:w-auto px-5 py-4 sm:py-5 bg-transparent text-zinc-600 text-xs font-black tracking-[0.2em] uppercase border border-zinc-800 hover:border-red-600 hover:text-red-600 focus:outline-none active:scale-95"
                     aria-label="Declarar pérdida de foco">
                     ✕ Perdí el foco
                 </button>
 
                 <button id="btn-resume" type="button"
-                    class="hidden w-full sm:w-auto px-8 py-4 sm:py-5 bg-red-600 text-zinc-50 text-sm font-black tracking-[0.2em] uppercase border-2 border-red-600 transition-all duration-100 hover:bg-zinc-950 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-95"
+                    class="hidden w-full sm:w-auto px-8 py-4 sm:py-5 bg-red-600 text-zinc-50 text-sm font-black tracking-[0.2em] uppercase border-2 border-red-600 hover:bg-zinc-950 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 active:scale-95"
                     aria-label="Retomar sesión de trabajo">
                     ▶ Retomar trabajo
                 </button>
 
                 <button id="btn-end" type="button"
-                    class="hidden w-full sm:w-auto px-5 py-4 sm:py-5 bg-transparent text-zinc-700 text-xs font-black tracking-[0.2em] uppercase border border-zinc-800 transition-all duration-100 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95"
+                    class="hidden w-full sm:w-auto px-5 py-4 sm:py-5 bg-transparent text-zinc-700 text-xs font-black tracking-[0.2em] uppercase border border-zinc-800 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95"
                     aria-label="Terminar sesión del día">
                     ◼ Terminar sesión
                 </button>
 
                 <button id="btn-reset" type="button"
-                    class="hidden w-full sm:w-auto px-5 py-4 sm:py-5 bg-transparent text-zinc-800 text-xs font-black tracking-[0.2em] uppercase border border-zinc-900 transition-all duration-100 hover:border-zinc-700 hover:text-zinc-600 focus:outline-none active:scale-95"
+                    class="hidden w-full sm:w-auto px-5 py-4 sm:py-5 bg-transparent text-zinc-800 text-xs font-black tracking-[0.2em] uppercase border border-zinc-900 hover:border-zinc-700 hover:text-zinc-600 focus:outline-none active:scale-95"
                     aria-label="Reiniciar estadísticas del día">
                     Reiniciar día
                 </button>
@@ -236,9 +248,11 @@
             <ol id="history-list" class="flex flex-col" aria-label="Historial de bloques de trabajo y distracción"></ol>
         </section>
 
-        <!-- ─── SECCIÓN: ¿POR QUÉ FUNCIONA? ──────────────────────────────────── -->
         <section class="py-16 md:py-24 border-t border-zinc-800" aria-label="Por qué funciona Postpone">
-            <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700 mb-8">Por qué funciona</p>
+            <div class="flex items-center justify-between mb-8">
+                <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700">Por qué funciona</p>
+                <a href="metodo.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-500 hover:text-zinc-200 underline decoration-zinc-800 underline-offset-4">Leer más sobre el método →</a>
+            </div>
             <h2 class="text-2xl md:text-3xl font-black text-zinc-100 leading-tight mb-10 max-w-2xl">El sistema de foco
                 basado en compromiso activo</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-800">
@@ -248,8 +262,7 @@
                     <h3 class="text-base font-black text-zinc-200 mb-3 leading-tight">Declaras antes de actuar</h3>
                     <p class="text-sm text-zinc-500 leading-relaxed">A diferencia de los timers pasivos, Postpone te
                         exige una declaración explícita de intención. Cada vez que presionas "Iniciar sesión" estás
-                        haciendo un compromiso contigo mismo. Esa fricción mínima activa la responsabilidad personal y
-                        reduce la probabilidad de procrastinar inmediatamente después de comenzar.</p>
+                        haciendo un compromiso contigo mismo.</p>
                 </div>
                 <div class="bg-zinc-950 p-6 md:p-8">
                     <p class="text-[9px] font-black tracking-[0.4em] uppercase text-zinc-600 mb-4">02 — Visibilidad del
@@ -258,16 +271,14 @@
                     </h3>
                     <p class="text-sm text-zinc-500 leading-relaxed">El tiempo perdido se muestra en rojo, contando cada
                         segundo en tiempo real. No es un número abstracto al final del día: es el costo visible, frente
-                        a ti, mientras ocurre. Esa incomodidad sostenida es el mecanismo de cambio conductual más
-                        efectivo que existe.</p>
+                        a ti, mientras ocurre.</p>
                 </div>
                 <div class="bg-zinc-950 p-6 md:p-8">
                     <p class="text-[9px] font-black tracking-[0.4em] uppercase text-zinc-600 mb-4">03 — Sin fricción
                         adicional</p>
                     <h3 class="text-base font-black text-zinc-200 mb-3 leading-tight">Sin cuentas ni configuración</h3>
                     <p class="text-sm text-zinc-500 leading-relaxed">No hay registro de usuario, no hay sincronización
-                        en la nube, no hay apps que instalar. Solo tú y el tiempo. Los datos se guardan localmente en tu
-                        dispositivo y se reinician cada día. La simplicidad elimina excusas y barreras de entrada.</p>
+                        en la nube, no hay apps que instalar. Solo tú y el tiempo. Los datos se guardan localmente y se reinician cada día.</p>
                 </div>
             </div>
         </section>
@@ -352,7 +363,10 @@
 
         <!-- ─── SECCIÓN: LA CIENCIA ───────────────────────────────────────────── -->
         <section class="py-16 md:py-24 border-t border-zinc-800" aria-label="La ciencia detrás de la procrastinación">
-            <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700 mb-8">La ciencia</p>
+            <div class="flex items-center justify-between mb-8">
+                <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700">La ciencia</p>
+                <a href="ciencia.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-500 hover:text-zinc-200 underline decoration-zinc-800 underline-offset-4">Explorar la ciencia →</a>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 mb-12">
                 <div>
                     <h2 class="text-2xl md:text-3xl font-black text-zinc-100 leading-tight mb-6">Por qué
@@ -416,8 +430,10 @@
 
         <!-- ─── SECCIÓN: TÉCNICAS ──────────────────────────────────────────────── -->
         <section class="py-16 md:py-24 border-t border-zinc-800" aria-label="Técnicas de productividad probadas">
-            <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700 mb-8">Técnicas de productividad
-            </p>
+            <div class="flex items-center justify-between mb-8">
+                <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700">Técnicas de productividad</p>
+                <a href="tecnicas.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-500 hover:text-zinc-200 underline decoration-zinc-800 underline-offset-4">Ver todas las técnicas →</a>
+            </div>
             <h2 class="text-2xl md:text-3xl font-black text-zinc-100 leading-tight mb-10 max-w-xl">Estrategias probadas
                 que complementan el método de foco activo</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-800">
@@ -478,7 +494,10 @@
 
         <!-- ─── SECCIÓN: FAQ ───────────────────────────────────────────────────── -->
         <section class="py-16 md:py-24 border-t border-zinc-800" aria-label="Preguntas frecuentes sobre Postpone">
-            <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700 mb-8">Preguntas frecuentes</p>
+            <div class="flex items-center justify-between mb-8">
+                <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700">Preguntas frecuentes</p>
+                <a href="faq.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-500 hover:text-zinc-200 underline decoration-zinc-800 underline-offset-4">Centro de ayuda →</a>
+            </div>
             <h2 class="text-2xl font-black text-zinc-100 mb-10">Todo lo que necesitas saber sobre Postpone</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-800">
                 <div class="bg-zinc-950 p-6 md:p-8">
@@ -544,10 +563,12 @@
 
         <!-- ─── SECCIÓN: SOBRE EL PROYECTO ────────────────────────────────────── -->
         <section class="py-16 md:py-24 border-t border-zinc-800" aria-label="Sobre el proyecto Postpone">
+            <div class="flex items-center justify-between mb-8">
+                <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700">Sobre el proyecto</p>
+                <a href="about.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-500 hover:text-zinc-200 underline decoration-zinc-800 underline-offset-4">Conoce la historia →</a>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
                 <div>
-                    <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700 mb-6">Sobre el proyecto
-                    </p>
                     <h2 class="text-2xl md:text-3xl font-black text-zinc-100 leading-tight mb-6">Hecho para los que
                         luchan con el foco real</h2>
                     <p class="text-sm text-zinc-500 leading-relaxed mb-4">Postpone nació de una frustración personal:
@@ -647,23 +668,22 @@
         <div
             class="border-t border-zinc-900 px-6 py-5 max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <p class="text-[10px] font-black tracking-[0.4em] uppercase text-zinc-800">El tiempo no negocia.</p>
-            <div class="flex items-center gap-3 flex-wrap">
+            <div class="flex items-center gap-4 flex-wrap">
+                <a href="about.html" class="text-[10px] font-black tracking-[0.25em] uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Acerca de</a>
+                <a href="contact.html" class="text-[10px] font-black tracking-[0.25em] uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Contacto</a>
+                <a href="privacy.html" class="text-[10px] font-black tracking-[0.25em] uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Privacidad</a>
+                <a href="terms.html" class="text-[10px] font-black tracking-[0.25em] uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Términos</a>
+                <div class="w-px h-3 bg-zinc-900 mx-2"></div>
                 <a href="https://ko-fi.com/neosowo" target="_blank" rel="noopener noreferrer"
-                    class="flex items-center gap-2 px-4 py-2 border border-zinc-800 text-zinc-600 text-[10px] font-black tracking-[0.25em] uppercase transition-all duration-100 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95"
+                    class="flex items-center gap-2 text-zinc-600 text-[10px] font-black tracking-[0.25em] uppercase hover:text-zinc-400 transition-colors"
                     aria-label="Donar vía Ko-fi">
-                    <span aria-hidden="true">☕</span>
                     <span>Ko-fi</span>
                 </a>
                 <button id="btn-deuna" type="button"
-                    class="flex items-center gap-2 px-4 py-2 border border-zinc-800 text-zinc-600 text-[10px] font-black tracking-[0.25em] uppercase transition-all duration-100 hover:border-zinc-600 hover:text-zinc-400 focus:outline-none active:scale-95"
+                    class="flex items-center gap-2 text-zinc-600 text-[10px] font-black tracking-[0.25em] uppercase hover:text-zinc-400 transition-colors"
                     aria-label="Donar vía Deuna con QR">
-                    <span aria-hidden="true">⯾</span>
                     <span>Deuna</span>
                 </button>
-                <a href="privacy.html"
-                    class="text-[10px] font-black tracking-[0.25em] uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Privacidad</a>
-                <a href="terms.html"
-                    class="text-[10px] font-black tracking-[0.25em] uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Términos</a>
             </div>
             <p class="text-[10px] font-black tracking-[0.4em] uppercase text-zinc-800">Postpone &copy; 2026</p>
         </div>
@@ -712,6 +732,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="script.js"></script>
     <script>
         const modalDeuna = document.getElementById('modal-deuna');

@@ -109,7 +109,10 @@ const loadPersisted = () => {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return null;
         const data = JSON.parse(raw);
-        if (data.date !== getTodayKey()) return null;
+        if (data.date !== getTodayKey()) {
+            localStorage.removeItem(STORAGE_KEY); // Reset for new day
+            return null;
+        }
         return data;
     } catch {
         return null;
@@ -123,6 +126,9 @@ const savePersisted = () => {
             workSeconds: committedWorkSeconds,
             lostSeconds: committedLostSeconds,
             interruptions: committedInterruptions,
+            currentState,
+            blockStart,
+            history: historyList.innerHTML // Saving history DOM to preserve across reloads
         }));
     } catch { }
 };
@@ -133,6 +139,27 @@ const initFromStorage = () => {
         committedWorkSeconds = data.workSeconds ?? 0;
         committedLostSeconds = data.lostSeconds ?? 0;
         committedInterruptions = data.interruptions ?? 0;
+        currentState = data.currentState ?? STATES.IDLE;
+        blockStart = data.blockStart ?? null;
+        if (data.history) {
+            historyList.innerHTML = data.history;
+            historySection.classList.remove('hidden');
+        }
+        
+        // Resume session visual state
+        if (currentState === STATES.WORKING) {
+            showOnly(stateWorking, true);
+            showButtons('btn-lost-focus', 'btn-end');
+            setNavState('Trabajando', 'bg-zinc-50');
+        } else if (currentState === STATES.DISTRACTED) {
+            showOnly(stateDistracted, true);
+            showButtons('btn-resume', 'btn-end');
+            setNavState('Sin foco', 'bg-red-600');
+            startDistractInterval();
+        } else {
+            showOnly(stateIdle, true);
+            showButtons('btn-start');
+        }
     }
 };
 
@@ -170,6 +197,7 @@ const calcEfficiency = (work, lost) => {
 };
 
 const updateStatsPanel = (workSec, lostSec) => {
+    // No GSAP for ticking HMS to prevent "counting from 0" bug
     statWork.textContent = formatHMS(workSec);
     statLost.textContent = formatHMS(lostSec);
     statInterruptions.textContent = committedInterruptions;
@@ -178,11 +206,27 @@ const updateStatsPanel = (workSec, lostSec) => {
     if (eff === null) {
         statEfficiency.textContent = '—';
         navEfficiency.textContent = '—';
-        efficiencyBar.style.width = '0%';
+        if (window.gsap) gsap.to(efficiencyBar, { width: '0%', duration: 0.8, ease: "power3.out" });
+        else efficiencyBar.style.width = '0%';
     } else {
-        statEfficiency.textContent = `${eff}%`;
+        // Only animate efficiency percentage text and bar for smoother transitions
+        if (window.gsap) {
+            const currentEff = parseInt(statEfficiency.textContent) || 0;
+            if (currentEff !== eff) {
+                gsap.to(statEfficiency, {
+                    duration: 1,
+                    textContent: eff,
+                    snap: { textContent: 1 },
+                    onUpdate: () => { statEfficiency.textContent = `${Math.round(statEfficiency.textContent)}%` },
+                    ease: "power3.out"
+                });
+                gsap.to(efficiencyBar, { width: `${eff}%`, duration: 0.8, ease: "power2.out" });
+            }
+        } else {
+            statEfficiency.textContent = `${eff}%`;
+            efficiencyBar.style.width = `${eff}%`;
+        }
         navEfficiency.textContent = `${eff}%`;
-        efficiencyBar.style.width = `${eff}%`;
     }
 };
 
@@ -205,6 +249,11 @@ const masterTick = () => {
     }
 
     updateStatsPanel(workSec, lostSec);
+
+    // Auto-save every second to prevent data loss in crash
+    if (currentState !== STATES.IDLE) {
+        savePersisted();
+    }
 };
 
 const setNavState = (label, color) => {
@@ -212,14 +261,24 @@ const setNavState = (label, color) => {
     navStateDot.className = `w-1.5 h-1.5 ${color}`;
 };
 
-const showOnly = (...els) => {
-    [stateIdle, stateWorking, stateDistracted].forEach(el => el.classList.add('hidden'));
-    els.forEach(el => el.classList.remove('hidden'));
+const showOnly = (elToShow, immediate = false) => {
+    const allStates = [stateIdle, stateWorking, stateDistracted];
+    allStates.forEach(el => el.classList.add('hidden'));
+    elToShow.classList.remove('hidden');
+
+    if (window.gsap && !immediate) {
+        gsap.fromTo(elToShow, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", clearProps: "all" });
+    } else {
+        elToShow.style.opacity = '1';
+    }
 };
 
 const showButtons = (...ids) => {
     [btnStart, btnLostFocus, btnResume, btnEnd, btnReset].forEach(b => b.classList.add('hidden'));
-    ids.forEach(id => document.getElementById(id).classList.remove('hidden'));
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('hidden');
+    });
 };
 
 const addHistoryBlock = (type, durationSeconds, startTime) => {
@@ -229,8 +288,7 @@ const addHistoryBlock = (type, durationSeconds, startTime) => {
 
     const li = document.createElement('li');
     li.className = 'flex items-center gap-4 border-t border-zinc-900 py-3 first:border-t-0';
-    li.style.animation = 'slide-down 0.25s ease-out forwards';
-
+    
     const dot = document.createElement('span');
     dot.className = `w-2 h-2 shrink-0 ${isWork ? 'bg-zinc-50' : 'bg-red-600'}`;
 
@@ -253,6 +311,10 @@ const addHistoryBlock = (type, durationSeconds, startTime) => {
 
     historyList.prepend(li);
     historySection.classList.remove('hidden');
+
+    if (window.gsap) {
+        gsap.fromTo(li, { x: -20, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out", clearProps: "all" });
+    }
 };
 
 const commitBlock = () => {
@@ -270,12 +332,21 @@ const commitBlock = () => {
 
 const cycleDistractMessage = () => {
     distractMsgIndex = (distractMsgIndex + 1) % DISTRACT_MESSAGES.length;
-    distractMessage.style.opacity = '0';
-    setTimeout(() => {
+    if (window.gsap) {
+        gsap.to(distractMessage, {
+            opacity: 0, duration: 0.3, onComplete: () => {
+                distractMessage.textContent = DISTRACT_MESSAGES[distractMsgIndex];
+                gsap.to(distractMessage, { opacity: 1, duration: 0.4 });
+            }
+        });
+    } else {
         distractMessage.textContent = DISTRACT_MESSAGES[distractMsgIndex];
-        distractMessage.style.opacity = '1';
-        distractMessage.style.transition = 'opacity 0.4s ease';
-    }, 300);
+    }
+};
+
+const startDistractInterval = () => {
+    if (distractMsgInterval) clearInterval(distractMsgInterval);
+    distractMsgInterval = setInterval(cycleDistractMessage, 5000);
 };
 
 const handleStart = () => {
@@ -286,6 +357,7 @@ const handleStart = () => {
     showButtons('btn-lost-focus', 'btn-end');
     setNavState('Trabajando', 'bg-zinc-50');
     soundStart();
+    savePersisted();
 };
 
 const handleLostFocus = () => {
@@ -298,16 +370,15 @@ const handleLostFocus = () => {
 
     distractMsgIndex = Math.floor(Math.random() * DISTRACT_MESSAGES.length);
     distractMessage.textContent = DISTRACT_MESSAGES[distractMsgIndex];
-    distractMessage.style.opacity = '1';
     distractTimer.textContent = formatHMS(0);
 
-    if (distractMsgInterval) clearInterval(distractMsgInterval);
-    distractMsgInterval = setInterval(cycleDistractMessage, 5000);
+    startDistractInterval();
 
     showOnly(stateDistracted);
     showButtons('btn-resume', 'btn-end');
     setNavState('Sin foco', 'bg-red-600');
     soundLostFocus();
+    savePersisted();
 };
 
 const handleResume = () => {
@@ -322,6 +393,7 @@ const handleResume = () => {
     showButtons('btn-lost-focus', 'btn-end');
     setNavState('Trabajando', 'bg-zinc-50');
     soundResume();
+    savePersisted();
 };
 
 const handleEnd = () => {
@@ -336,6 +408,7 @@ const handleEnd = () => {
     setNavState('Inactivo', 'bg-zinc-700');
     updateStatsPanel(totalWorkSeconds(), totalLostSeconds());
     soundEnd();
+    savePersisted();
 };
 
 const handleReset = () => {
@@ -347,8 +420,7 @@ const handleReset = () => {
     committedWorkSeconds = 0;
     committedLostSeconds = 0;
     committedInterruptions = 0;
-    savePersisted();
-
+    
     historyList.innerHTML = '';
     historySection.classList.add('hidden');
     workTimer.textContent = formatHMS(0);
@@ -358,13 +430,40 @@ const handleReset = () => {
     showButtons('btn-start');
     setNavState('Inactivo', 'bg-zinc-700');
     updateStatsPanel(0, 0);
+    savePersisted();
 };
 
+// Start Logic
 initFromStorage();
 masterTick();
 masterInterval = setInterval(masterTick, 1000);
-showButtons('btn-start');
 
+// Fallback for non-GSAP environments
+if (!window.gsap) {
+    document.querySelectorAll('.gsap-reveal').forEach(el => el.style.opacity = '1');
+}
+
+// App Entrance Animation
+const runAppEntrance = () => {
+    if (!window.gsap) return;
+    gsap.set('.gsap-reveal', { opacity: 1 });
+    const tl = gsap.timeline({ defaults: { ease: "power2.out", duration: 0.6 }});
+    gsap.set(['nav', '#clock', '#day-pct-label', '#state-block', '#btn-start'], { opacity: 1, visibility: 'visible' });
+
+    tl.from('nav', { y: -20, opacity: 0 })
+      .from('#clock', { scale: 1.1, opacity: 0, duration: 1, ease: "expo.out" }, "-=0.3")
+      .from('#day-pct-label', { x: 10, opacity: 0 }, "-=0.7")
+      .from('#state-block', { y: 10, opacity: 0 }, "-=0.5")
+      .from('#action-area button:not(.hidden)', { y: 20, opacity: 0, ease: "back.out(2)" }, "-=0.4");
+};
+
+if (document.readyState === 'complete') {
+    runAppEntrance();
+} else {
+    window.addEventListener('load', runAppEntrance);
+}
+
+// Event Listeners
 btnStart.addEventListener('click', handleStart);
 btnLostFocus.addEventListener('click', handleLostFocus);
 btnResume.addEventListener('click', handleResume);
@@ -375,6 +474,7 @@ btnMute.addEventListener('click', () => {
     soundMuted = !soundMuted;
     muteIcon.textContent = soundMuted ? '\u2715' : '\u266a';
     btnMute.title = soundMuted ? 'Sonidos silenciados' : 'Sonidos activados';
+    if (window.gsap) gsap.fromTo(btnMute, { scale: 0.8 }, { scale: 1, duration: 0.3, ease: "elastic.out(1.2, 0.4)" });
     btnMute.classList.toggle('border-red-900', soundMuted);
     btnMute.classList.toggle('text-red-900', soundMuted);
     btnMute.classList.toggle('border-zinc-800', !soundMuted);

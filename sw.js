@@ -1,10 +1,19 @@
-const CACHE_NAME = 'postpone-v1';
+const CACHE_NAME = 'postpone-v2';
 
 const STATIC_ASSETS = [
     './',
     './index.html',
+    './about.html',
+    './contact.html',
+    './metodo.html',
+    './ciencia.html',
+    './tecnicas.html',
+    './faq.html',
+    './privacy.html',
+    './terms.html',
     './styles.css',
     './script.js',
+    './animations.js',
     './manifest.json',
     './img/favicon.png',
     './img/qr.png',
@@ -13,6 +22,7 @@ const STATIC_ASSETS = [
 const EXTERNAL_ASSETS = [
     'https://cdn.tailwindcss.com',
     'https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@700&display=swap',
+    'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js',
 ];
 
 self.addEventListener('install', (event) => {

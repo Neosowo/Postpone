@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description"
-        content="Política de Privacidad de Postpone — Cómo manejamos tus datos, qué información se recopila y cómo se usa." />
+        content="Política de Privacidad de Postpone — Cómo manejamos tus datos, compromiso con la privacidad local y uso de cookies de terceros." />
     <meta name="robots" content="index, follow" />
     <meta name="author" content="neosowo" />
     <link rel="icon" type="image/png" href="img/favicon.ico" />
@@ -16,201 +16,70 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css" />
+    <style>
+        .gsap-reveal { opacity: 0; }
+    </style>
 </head>
 
 <body class="bg-zinc-950 text-zinc-50 min-h-screen font-sans antialiased">
 
-    <nav class="fixed top-0 left-0 right-0 z-40 border-b border-zinc-800 bg-zinc-950 bg-opacity-95 backdrop-blur-sm">
+    <nav class="gsap-reveal fixed top-0 left-0 right-0 z-40 border-b border-zinc-800 bg-zinc-950 bg-opacity-95 backdrop-blur-sm">
         <div class="max-w-6xl mx-auto px-6 h-12 flex items-center justify-between">
-            <a href="index.html"
-                class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-500 hover:text-zinc-300 transition-colors">←
-                Postpone</a>
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-500 hover:text-zinc-100 transition-colors">Postpone</a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="metodo.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-600 hover:text-zinc-300 transition-colors">Método</a>
+                    <a href="ciencia.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-600 hover:text-zinc-300 transition-colors">Ciencia</a>
+                    <a href="tecnicas.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-600 hover:text-zinc-300 transition-colors">Técnicas</a>
+                    <a href="about.html" class="text-[9px] font-black tracking-widest uppercase text-zinc-600 hover:text-zinc-300 transition-colors">Acerca de</a>
+                </div>
+            </div>
             <span class="text-[10px] font-black tracking-[0.4em] uppercase text-zinc-700">Privacidad</span>
         </div>
     </nav>
 
-    <main class="max-w-3xl mx-auto px-6 pt-24 pb-32">
+    <main class="gsap-reveal max-w-3xl mx-auto px-6 pt-24 pb-32">
 
         <header class="py-16 border-b border-zinc-800 mb-12">
-            <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700 mb-4">Documento legal</p>
+            <p class="text-[10px] font-black tracking-[0.5em] uppercase text-zinc-700 mb-4">Privacidad primero</p>
             <h1 class="text-3xl md:text-4xl font-black text-zinc-50 leading-tight mb-4">Política de Privacidad</h1>
             <p class="text-sm text-zinc-500">Última actualización: 6 de marzo de 2026</p>
         </header>
 
-        <article class="prose-content">
-
+        <article>
             <section class="mb-12">
-                <h2 class="text-lg font-black text-zinc-200 mb-4">1. Introducción</h2>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4">Esta Política de Privacidad describe cómo Postpone
-                    ("la aplicación", "el servicio", "nosotros") recopila, usa y protege la información de los usuarios
-                    que visitan y utilizan el sitio web disponible en <strong
-                        class="text-zinc-400">https://neosowo.github.io/Postpone/</strong>.</p>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4">Postpone es un proyecto de código abierto
-                    desarrollado y mantenido de forma independiente por Erick (GitHub: <a
-                        href="https://github.com/Neosowo"
-                        class="text-zinc-400 underline hover:text-zinc-200">@Neosowo</a>). Al usar Postpone, aceptas los
-                    términos descritos en esta política.</p>
-                <p class="text-sm text-zinc-500 leading-relaxed">Nos comprometemos a proteger tu privacidad. Esta
-                    política explica de forma transparente qué datos se manejan, por qué y qué derechos tienes sobre
-                    ellos.</p>
+                <h2 class="text-lg font-black text-zinc-200 mb-4">1. Datos Locales (No se colectan)</h2>
+                <p class="text-sm text-zinc-500 leading-relaxed mb-4">En Postpone, creemos firmemente en la soberanía de los datos. Toda la información sobre tus sesiones de trabajo, tiempo perdido y eficiencia se guarda <strong class="text-zinc-400">exclusivamente en tu navegador</strong> utilizando <code class="text-xs bg-zinc-900 px-1 py-0.5">localStorage</code>.</p>
+                <p class="text-sm text-zinc-500 leading-relaxed">No tenemos servidores que almacenen tus hábitos de productividad. No hay cuentas de usuario. Tus datos nunca abandonan tu dispositivo bajo nuestro control.</p>
             </section>
 
             <section class="mb-12">
-                <h2 class="text-lg font-black text-zinc-200 mb-4">2. Información que recopilamos</h2>
-                <h3 class="text-sm font-black text-zinc-300 mb-2 mt-6">2.1 Datos almacenados localmente</h3>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4">Postpone almacena datos exclusivamente en tu
-                    dispositivo mediante <code class="text-xs bg-zinc-900 text-zinc-400 px-1 py-0.5">localStorage</code>
-                    del navegador. Esta información incluye:</p>
-                <ul class="list-none flex flex-col gap-3 mb-4">
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Tiempo
-                        total de foco acumulado en el día (en segundos)</li>
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Tiempo
-                        total perdido (distracción) acumulado en el día</li>
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Número de
-                        interrupciones del día</li>
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>La fecha
-                        del día actual (para reiniciar los contadores automáticamente)</li>
-                </ul>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4"><strong class="text-zinc-400">Esta información
-                        nunca se transmite a ningún servidor.</strong> Permanece exclusivamente en tu dispositivo y
-                    puede ser eliminada limpiando los datos de sitio en tu navegador.</p>
-
-                <h3 class="text-sm font-black text-zinc-300 mb-2 mt-6">2.2 Datos recopilados por terceros (Google
-                    AdSense)</h3>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4">Postpone utiliza Google AdSense para mostrar
-                    publicidad. Google, como proveedor de terceros, usa cookies para servir anuncios basados en las
-                    visitas previas del usuario a este sitio y a otros sitios de internet.</p>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4">Google podrá recopilar información como:</p>
-                <ul class="list-none flex flex-col gap-3 mb-4">
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Dirección
-                        IP (anonimizada)</li>
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Cookies de
-                        DoubleClick y Google Analytics</li>
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Datos de
-                        interacción con los anuncios (clics, impresiones)</li>
-                    <li class="flex gap-3 text-sm text-zinc-500"><span
-                            class="text-zinc-700 shrink-0">—</span>Información sobre el dispositivo y el navegador</li>
-                </ul>
-                <p class="text-sm text-zinc-500 leading-relaxed">Puedes consultar la <a
-                        href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
-                        class="text-zinc-400 underline hover:text-zinc-200">Política de Privacidad de Google</a> para
-                    más información sobre cómo Google maneja estos datos. Puedes desactivar el uso de cookies
-                    personalizadas en <a href="https://www.google.com/settings/ads" target="_blank"
-                        rel="noopener noreferrer" class="text-zinc-400 underline hover:text-zinc-200">Configuración de
-                        anuncios de Google</a>.</p>
+                <h2 class="text-lg font-black text-zinc-200 mb-4">2. Cookies y Publicidad</h2>
+                <p class="text-sm text-zinc-500 leading-relaxed mb-4">Utilizamos <strong class="text-zinc-400">Google AdSense</strong> para mostrar anuncios. Google, como proveedor tercero, utiliza cookies para publicar anuncios basados en tus visitas anteriores a este y otros sitios web.</p>
+                <p class="text-sm text-zinc-500 leading-relaxed">El uso de cookies de publicidad permite a Google y a sus socios mostrar anuncios basados en tu comportamiento de navegación. Puedes inhabilitar la publicidad personalizada visitando <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener" class="text-zinc-400 underline">Configuración de anuncios de Google</a>.</p>
             </section>
 
             <section class="mb-12">
-                <h2 class="text-lg font-black text-zinc-200 mb-4">3. Cómo usamos la información</h2>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4">Los datos almacenados localmente (estadísticas del
-                    día) se usan únicamente para:</p>
-                <ul class="list-none flex flex-col gap-3 mb-4">
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Mostrar el
-                        progreso de la sesión actual en la interfaz de la aplicación</li>
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Calcular
-                        el índice de eficiencia del día</li>
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Persistir
-                        el estado entre recargas de página durante el mismo día</li>
-                </ul>
-                <p class="text-sm text-zinc-500 leading-relaxed">No usamos estos datos para análisis, perfilado de
-                    usuarios, marketing ni ningún otro propósito.</p>
+                <h2 class="text-lg font-black text-zinc-200 mb-4">3. Seguridad</h2>
+                <p class="text-sm text-zinc-500 leading-relaxed">Dado que los datos son locales, la seguridad de tu historial de productividad depende de la seguridad de tu propio dispositivo y navegador. Postpone utiliza protocolos HTTPS para garantizar una conexión segura con el sitio.</p>
             </section>
-
-            <section class="mb-12">
-                <h2 class="text-lg font-black text-zinc-200 mb-4">4. Cookies</h2>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4">Postpone en sí mismo no utiliza cookies propias.
-                    Sin embargo, Google AdSense puede establecer cookies en tu navegador con fines publicitarios como se
-                    describe en la sección 2.2.</p>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4">Puedes configurar tu navegador para rechazar
-                    cookies o ser notificado cuando se envíen. Sin embargo, si rechazas las cookies, es posible que
-                    algunas partes del servicio no funcionen correctamente.</p>
-                <p class="text-sm text-zinc-500 leading-relaxed">Para más información sobre cómo gestionar cookies en tu
-                    navegador, consulta la documentación oficial de tu navegador (Chrome, Firefox, Safari, Edge).</p>
-            </section>
-
-            <section class="mb-12">
-                <h2 class="text-lg font-black text-zinc-200 mb-4">5. Compartición de datos con terceros</h2>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4">No vendemos, comercializamos ni transferimos a
-                    terceros información personal identificable de nuestros usuarios.</p>
-                <p class="text-sm text-zinc-500 leading-relaxed">Los únicos terceros con los que interactúa el sitio
-                    son:</p>
-                <ul class="list-none flex flex-col gap-3 mt-4">
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span><strong
-                            class="text-zinc-400">Google AdSense</strong> — Para servir publicidad contextual según las
-                        políticas de Google</li>
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span><strong
-                            class="text-zinc-400">GitHub Pages</strong> — Para el hosting del sitio estático (sin
-                        recopilación de datos adicional de nuestra parte)</li>
-                </ul>
-            </section>
-
-            <section class="mb-12">
-                <h2 class="text-lg font-black text-zinc-200 mb-4">6. Seguridad</h2>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4">Dado que todos los datos de la aplicación se
-                    almacenan localmente en tu dispositivo, la seguridad de esos datos depende de la seguridad de tu
-                    propio dispositivo y navegador.</p>
-                <p class="text-sm text-zinc-500 leading-relaxed">El sitio se sirve exclusivamente a través de HTTPS,
-                    garantizando que la comunicación entre tu navegador y los servidores de GitHub Pages esté cifrada.
-                </p>
-            </section>
-
-            <section class="mb-12">
-                <h2 class="text-lg font-black text-zinc-200 mb-4">7. Privacidad de menores</h2>
-                <p class="text-sm text-zinc-500 leading-relaxed">Postpone no está dirigido a menores de 13 años. No
-                    recopilamos intencionalmente información de menores de 13 años. Si eres padre o tutor y crees que tu
-                    hijo nos ha proporcionado información personal, contáctanos para que podamos tomar las medidas
-                    necesarias.</p>
-            </section>
-
-            <section class="mb-12">
-                <h2 class="text-lg font-black text-zinc-200 mb-4">8. Tus derechos</h2>
-                <p class="text-sm text-zinc-500 leading-relaxed mb-4">Tienes derecho a:</p>
-                <ul class="list-none flex flex-col gap-3 mb-4">
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Eliminar
-                        todos los datos locales de la aplicación limpiando el almacenamiento del sitio en tu navegador
-                    </li>
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Desactivar
-                        las cookies publicitarias a través de la <a href="https://www.google.com/settings/ads"
-                            target="_blank" rel="noopener noreferrer"
-                            class="text-zinc-400 underline hover:text-zinc-200">Configuración de anuncios de Google</a>
-                    </li>
-                    <li class="flex gap-3 text-sm text-zinc-500"><span class="text-zinc-700 shrink-0">—</span>Usar
-                        bloqueadores de anuncios si prefieres no ver publicidad</li>
-                </ul>
-            </section>
-
-            <section class="mb-12">
-                <h2 class="text-lg font-black text-zinc-200 mb-4">9. Cambios a esta política</h2>
-                <p class="text-sm text-zinc-500 leading-relaxed">Podemos actualizar esta Política de Privacidad
-                    periódicamente. La fecha de "Última actualización" al inicio del documento indicará cuándo se
-                    realizó la revisión más reciente. Te recomendamos revisar esta página de vez en cuando. El uso
-                    continuado de Postpone tras los cambios implica tu aceptación de la política actualizada.</p>
-            </section>
-
-            <section class="mb-12">
-                <h2 class="text-lg font-black text-zinc-200 mb-4">10. Contacto</h2>
-                <p class="text-sm text-zinc-500 leading-relaxed">Si tienes preguntas sobre esta Política de Privacidad,
-                    puedes contactarnos a través de <a href="https://github.com/Neosowo" target="_blank"
-                        rel="noopener noreferrer" class="text-zinc-400 underline hover:text-zinc-200">GitHub
-                        (@Neosowo)</a> o a través del enlace de soporte en <a href="https://ko-fi.com/neosowo"
-                        target="_blank" rel="noopener noreferrer"
-                        class="text-zinc-400 underline hover:text-zinc-200">Ko-fi</a>.</p>
-            </section>
-
         </article>
 
     </main>
 
-    <footer class="border-t border-zinc-900 px-6 py-6 max-w-6xl mx-auto flex items-center justify-between gap-4">
+    <footer class="border-t border-zinc-900 px-6 py-6 max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         <p class="text-[10px] font-black tracking-[0.4em] uppercase text-zinc-800">Postpone &copy; 2026</p>
-        <div class="flex items-center gap-4">
-            <a href="index.html"
-                class="text-[10px] font-black tracking-widest uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Inicio</a>
-            <a href="terms.html"
-                class="text-[10px] font-black tracking-widest uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Términos</a>
+        <div class="flex items-center gap-4 flex-wrap justify-center">
+            <a href="index.html" class="text-[10px] font-black tracking-widest uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Inicio</a>
+            <a href="about.html" class="text-[10px] font-black tracking-widest uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Acerca de</a>
+            <a href="contact.html" class="text-[10px] font-black tracking-widest uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Contacto</a>
+            <a href="privacy.html" class="text-[10px] font-black tracking-widest uppercase text-zinc-400 transition-colors">Privacidad</a>
+            <a href="terms.html" class="text-[10px] font-black tracking-widest uppercase text-zinc-800 hover:text-zinc-600 transition-colors">Términos</a>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="animations.js"></script>
 </body>
 
 </html>
